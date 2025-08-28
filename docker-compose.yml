@@ -1,0 +1,52 @@
+
+services:
+  flask:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    # env_file:
+    #   - .env
+    # volumes:
+    #   - .:/workspaces/lookout-app-rebuild
+    #   - ./.env:/app/.env
+    #   - .:/app
+
+    volumes:
+      - .:/workspaces/lookout-app-rebuild
+    working_dir: /workspaces/lookout-app-rebuild
+
+    ports:
+      - "5000:5000"
+      
+    depends_on:
+      - sqlserver
+
+    environment:
+      FLASK_ENV: development
+      FLASK_APP: website:create_app
+      FLASK_DEBUG: 1
+
+    # command: tail -f /dev/null
+
+    command: >
+      bash -c "
+        flask db migrate -m 'first migration' || true &&
+        flask db upgrade &&
+        flask run --host=0.0.0.0 --port=5000
+      "
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver
+    ports:
+      - "1433:1433"
+    environment:
+      - ACCEPT_EULA=Y
+      # - MSSQL_SA_PASSWORD=${SQL_SERVER_PASSWORD}
+      -  MSSQL_SA_PASSWORD=YourStrong!Passw0rd
+    healthcheck:
+      test: ["CMD", "/opt/mssql-tools/bin/sqlcmd", "-S", "localhost", "-U", "sa", "-P", "YourStrong!Passw0rd", "-Q", "SELECT 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
