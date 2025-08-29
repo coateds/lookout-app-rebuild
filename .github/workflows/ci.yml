@@ -43,17 +43,22 @@ jobs:
       - name: List running containers
         run: docker ps -a
 
+      - name: Get Flask container name
+        id: flask_name
+        run: echo "name=$(docker ps --filter 'ancestor=lookout-app-rebuild-flask' --format '{{.Names}}')" >> $GITHUB_OUTPUT
+
       - name: Show Flask logs if not running
         if: failure()
         run: docker logs flask || true
 
       - name: Run pytest in Flask container
-        run: docker exec lookout-app-rebuild-flask-1 pytest
+        # run: docker exec lookout-app-rebuild-flask-1 pytest
+        run: docker exec ${{ steps.flask_name.outputs.name }} pytest
 
       - name: Show logs if tests fail
         if: failure()
         run: |
-          docker logs lookout-app-rebuild-flask-1
+          docker logs ${{ steps.flask_name.outputs.name }}
           docker logs sqlserver
 
       - name: Tear down containers
