@@ -15,5 +15,7 @@
     "SQL_SERVER_CONTAINER_SERVICE": "${{ secrets.SQL_SERVER_CONTAINER_SERVICE }}",
     "ENV": "local"
   },
-  "postCreateCommand": "echo SQL_SERVER_USER=\"$SQL_SERVER_USER\" > .env && echo SQL_SERVER_PASSWORD=\"$SQL_SERVER_PASSWORD\" >> .env && echo SQL_SERVER_CONTAINER_SERVICE=\"$SQL_SERVER_CONTAINER_SERVICE\" >> .env && echo ENV=local >> .env && pip install -r requirements.txt"
+  "postCreateCommand": "echo SQL_SERVER_USER=$SQL_SERVER_USER > .env && echo SQL_SERVER_PASSWORD=$SQL_SERVER_PASSWORD >> .env && echo SQL_SERVER_CONTAINER_SERVICE=$SQL_SERVER_CONTAINER_SERVICE >> .env && echo ENV=local >> .env && pip install -r requirements.txt"
 }
+
+
