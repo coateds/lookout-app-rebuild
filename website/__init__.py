@@ -42,7 +42,7 @@ def create_app(config_override=None):
     from .views import views
     app.register_blueprint(views)
 
-    print("Tables")
-    print(db.Model.metadata.tables)
+    # print("Tables")
+    # print(db.Model.metadata.tables)
 
     return app
