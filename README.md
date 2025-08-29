@@ -37,11 +37,21 @@
     - starts safe tail cmd.
   - Attempts to write .env file
 - Currently, the codespace starts and then ends
-  - It appears to still be possible to connect to the recovery container
-  - Unable to complete RPC call, no client available
+  - Flask fails to run becuase it cannot talk to the database
+
+The reason the codespace fails is that .env reads:
+```
+SQL_SERVER_USER=${{ secrets.SQL_SERVER_USER }}
+SQL_SERVER_PASSWORD=${{ secrets.SQL_SERVER_PASSWORD }}
+SQL_SERVER_CONTAINER_SERVICE=${{ secrets.SQL_SERVER_CONTAINER_SERVICE }}
+ENV=local
+```
+
+When this file is corrected, flask can be sucessfully run manually
 
 - Codespaces Dashboard >  https://github.com/codespaces
 - Other Codespaces link > https://github.com/features/codespaces
+- https://github.com/settings/codespaces > find secrets here
 
 gh secret set SQL_SERVER_USER --user --app codespaces --body "your_sql_user"
 gh secret set SQL_SERVER_PASSWORD --user --app codespaces --body "your_sql_password"
