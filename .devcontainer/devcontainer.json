@@ -1,7 +1,7 @@
 {
   "name": "Lookout App Dev",
   "dockerComposeFile": [
-    "../docker-compose.yml"
+    "../docker-compose.ci.yml"
   ],
   "service": "flask",
   "workspaceFolder": "/workspaces/lookout-app-rebuild",
