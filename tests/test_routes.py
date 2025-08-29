@@ -14,6 +14,7 @@ from website import create_app
     ("/", 200),
     ("/env", 200),
     ("/db-check", 200),
+    ("/db-snookered", 200),
 ])
 def test_route_response(route, expected_status):
     app = create_app({"TESTING": True})
