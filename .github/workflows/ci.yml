@@ -33,10 +33,10 @@ jobs:
       - name: Build and start containers
         run: docker compose up --build -d
 
-      - name: Wait for SQL Server to be ready
+      - name: Wait for SQL Server healthcheck
         run: |
           for i in {1..30}; do
-            docker exec sqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${SQL_SERVER_PASSWORD}" -Q "SELECT 1" && break
+            [ "$(docker inspect -f '{{.State.Health.Status}}' sqlserver)" = "healthy" ] && break
             sleep 5
           done
 
