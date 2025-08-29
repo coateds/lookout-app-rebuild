@@ -40,6 +40,13 @@ jobs:
             sleep 5
           done
 
+      - name: List running containers
+        run: docker ps -a
+
+      - name: Show Flask logs if not running
+        if: failure()
+        run: docker logs flask || true
+
       - name: Run pytest in Flask container
         run: docker exec flask pytest
 
