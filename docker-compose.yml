@@ -32,14 +32,14 @@ services:
       ENV: ${ENV:-local}
 
 
-    # command: tail -f /dev/null
+    command: tail -f /dev/null
 
-    command: >
-      bash -c "
-        flask db migrate -m 'first migration' || true &&
-        flask db upgrade &&
-        flask run --host=0.0.0.0 --port=5000
-      "
+    # command: >
+    #   bash -c "
+    #     flask db migrate -m 'first migration' || true &&
+    #     flask db upgrade &&
+    #     flask run --host=0.0.0.0 --port=5000
+    #   "
 
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
