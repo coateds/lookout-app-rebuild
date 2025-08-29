@@ -1,0 +1,54 @@
+name: CI - Build, Test, and Pytest
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    env:
+      SQL_SERVER_USER: ${{ secrets.SQL_SERVER_USER }}
+      SQL_SERVER_PASSWORD: ${{ secrets.SQL_SERVER_PASSWORD }}
+      SQL_SERVER_CONTAINER_SERVICE: ${{ secrets.SQL_SERVER_CONTAINER_SERVICE }}
+      ENV: local
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Write .env file from secrets
+        run: |
+          echo "ENV=local" > .env
+          echo "SQL_SERVER_USER=${SQL_SERVER_USER}" >> .env
+          echo "SQL_SERVER_PASSWORD=${SQL_SERVER_PASSWORD}" >> .env
+          echo "SQL_SERVER_CONTAINER_SERVICE=${SQL_SERVER_CONTAINER_SERVICE}" >> .env
+
+      - name: Build and start containers
+        run: docker compose up --build -d
+
+      - name: Wait for SQL Server to be ready
+        run: |
+          for i in {1..30}; do
+            docker exec sqlserver /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "${SQL_SERVER_PASSWORD}" -Q "SELECT 1" && break
+            sleep 5
+          done
+
+      - name: Run pytest in Flask container
+        run: docker exec flask pytest
+
+      - name: Show logs if tests fail
+        if: failure()
+        run: |
+          docker logs flask
+          docker logs sqlserver
+
+      - name: Tear down containers
+        if: always()
+        run: docker compose down --volumes
