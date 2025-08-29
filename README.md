@@ -38,6 +38,9 @@
   - Attempts to write .env file
 - Currently, the codespace starts and then ends
   - Flask fails to run becuase it cannot talk to the database
+  - the devcontainer file now calls docker-compose.ci.yml
+    - does not start flask
+    - the .env file can be fixed and flask run manually
 
 The reason the codespace fails is that .env reads:
 ```
@@ -46,12 +49,18 @@ SQL_SERVER_PASSWORD=${{ secrets.SQL_SERVER_PASSWORD }}
 SQL_SERVER_CONTAINER_SERVICE=${{ secrets.SQL_SERVER_CONTAINER_SERVICE }}
 ENV=local
 ```
-
 When this file is corrected, flask can be sucessfully run manually
 
 - Codespaces Dashboard >  https://github.com/codespaces
 - Other Codespaces link > https://github.com/features/codespaces
 - https://github.com/settings/codespaces > find secrets here
+
+GitHub Copilot concludes:
+This is likely a Codespaces bug or a limitation of your account/region/plan.
+
+# GitHub cli
+- `Choco install gh`
+- cmd line for many tasks done on the GitHub Webpage
 
 gh secret set SQL_SERVER_USER --user --app codespaces --body "your_sql_user"
 gh secret set SQL_SERVER_PASSWORD --user --app codespaces --body "your_sql_password"
