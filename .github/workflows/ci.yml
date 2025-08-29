@@ -48,12 +48,12 @@ jobs:
         run: docker logs flask || true
 
       - name: Run pytest in Flask container
-        run: docker exec flask pytest
+        run: docker exec lookout-app-rebuild-flask-1 pytest
 
       - name: Show logs if tests fail
         if: failure()
         run: |
-          docker logs flask
+          docker logs lookout-app-rebuild-flask-1
           docker logs sqlserver
 
       - name: Tear down containers
