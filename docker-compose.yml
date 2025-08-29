@@ -26,6 +26,11 @@ services:
       FLASK_ENV: development
       FLASK_APP: website:create_app
       FLASK_DEBUG: 1
+      SQL_SERVER_USER: ${SQL_SERVER_USER}
+      SQL_SERVER_PASSWORD: ${SQL_SERVER_PASSWORD}
+      SQL_SERVER_CONTAINER_SERVICE: ${SQL_SERVER_CONTAINER_SERVICE}
+      ENV: ${ENV:-local}
+
 
     # command: tail -f /dev/null
 
