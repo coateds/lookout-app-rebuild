@@ -1,0 +1,19 @@
+{
+  "name": "Lookout App Dev",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "flask",
+  "workspaceFolder": "/workspaces/lookout-app-rebuild",
+  "forwardPorts": [5000, 1433],
+  "settings": {
+    "terminal.integrated.defaultProfile.linux": "bash"
+  },
+  "remoteEnv": {
+    "SQL_SERVER_USER": "${{ secrets.SQL_SERVER_USER }}",
+    "SQL_SERVER_PASSWORD": "${{ secrets.SQL_SERVER_PASSWORD }}",
+    "SQL_SERVER_CONTAINER_SERVICE": "${{ secrets.SQL_SERVER_CONTAINER_SERVICE }}",
+    "ENV": "local"
+  },
+  "postCreateCommand": "echo SQL_SERVER_USER=\"$SQL_SERVER_USER\" > .env && echo SQL_SERVER_PASSWORD=\"$SQL_SERVER_PASSWORD\" >> .env && echo SQL_SERVER_CONTAINER_SERVICE=\"$SQL_SERVER_CONTAINER_SERVICE\" >> .env && echo ENV=local >> .env && pip install -r requirements.txt"
+}
