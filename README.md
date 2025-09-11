@@ -30,7 +30,8 @@
   - Runs `run: docker exec ${{ steps.flask_name.outputs.name }} pytest`
   - Tears down the containers
 
-## Codespace - Still does not work (mapman change)
+## Codespace - STILL does not work
+
 - Uses .devcontainer\devcontainer.json
   - calls the docker-compose.ci.yml file
     - does not start flask
